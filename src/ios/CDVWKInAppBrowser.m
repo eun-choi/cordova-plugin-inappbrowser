@@ -1214,10 +1214,18 @@ BOOL isExiting = FALSE;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
-#pragma mark UIAdaptivePresentationControllerDelegate
+/*#pragma mark UIAdaptivePresentationControllerDelegate
 
 - (void)presentationControllerWillDismiss:(UIPresentationController *)presentationController {
     isExiting = TRUE;
+}*/
+
+#pragma mark - POPPopupBridgeDelegate
+- (void)popupBridge:(POPPopupBridge *)bridge requestsPresentationOfViewController:(UIViewController *)viewController {
+    [self presentViewController:viewController animated:YES completion:nil];
+}
+- (void)popupBridge:(POPPopupBridge *)bridge requestsDismissalOfViewController:(UIViewController *)viewController {
+    [viewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end //CDVWKInAppBrowserViewController

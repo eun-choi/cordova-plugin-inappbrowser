@@ -78,6 +78,66 @@
         <framework src="com.braintreepayments.api:popup-bridge:$POPUPBRIDGE_ANDROID_VERSION" />
 
         <hook type="after_prepare" src="src/android/update_manifest.js" />
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <queries>
+                <package android:name="com.kakao.talk" />
+                <package android:name="finance.chai.app" />
+                <package android:name="com.nhnent.payapp" />
+                <package android:name="com.lottemembers.android" />
+                <package android:name="com.ssg.serviceapp.android.egiftcertificate" />
+                <package android:name="com.inicis.kpay" />
+                <package android:name="com.tmoney.tmpay" />
+                <package android:name="viva.republica.toss" />
+                <package android:name="com.samsung.android.spay" />
+                <package android:name="com.nhn.android.search" />
+                <package android:name="com.mysmilepay.app" />
+                <package android:name="kvp.jjy.MispAndroid320" />
+                <package android:name="com.kbcard.cxh.appcard" />
+                <package android:name="com.kbstar.liivbank" />
+                <package android:name="com.kbstar.reboot" />
+                <package android:name="com.samsung.android.spaylite" />
+                <package android:name="com.lge.lgpay" />
+                <package android:name="com.hanaskcard.paycla" />
+                <package android:name="kr.co.hanamembers.hmscustomer" />
+                <package android:name="com.hanaskcard.rocomo.potal" />
+                <package android:name="com.citibank.cardapp" />
+                <package android:name="kr.co.citibank.citimobile" />
+                <package android:name="com.lcacApp" />
+                <package android:name="kr.co.samsungcard.mpocket" />
+                <package android:name="com.shcard.smartpay" />
+                <package android:name="com.shinhancard.smartshinhan" />
+                <package android:name="com.hyundaicard.appcard" />
+                <package android:name="nh.smart.nhallonepay" />
+                <package android:name="com.wooricard.smartapp" />
+                <package android:name="com.wooribank.smart.npib" />
+                <package android:name="com.TouchEn.mVaccine.webs" />
+                <package android:name="com.ahnlab.v3mobileplus" />
+                <package android:name="kr.co.shiftworks.vguardweb" />
+                <package android:name="com.hanaskcard.rocomo.potal" />
+                <package android:name="com.lumensoft.touchenappfree" />
+                <package android:name="com.kftc.bankpay.android" />
+                <package android:name="kr.co.kfcc.mobilebank" />
+                <package android:name="com.nh.cashcardapp" />
+                <package android:name="com.knb.psb" />
+                <package android:name="com.lguplus.paynow" />
+                <package android:name="com.kbankwith.smartbank" />
+                <package android:name="com.eg.android.AlipayGphone" />
+                <package android:name="com.sktelecom.tauth" />
+                <package android:name="com.lguplus.smartotp" />
+                <package android:name="com.kt.ktauth" />
+                <package android:name="kr.danal.app.damoum" />
+                <package android:name="com.kbstar.kbbank" />
+                <package android:name="nh.smart.mobilecard" />
+                <package android:name="com.lotte.lpay" />
+                <package android:name="com.lotte.lottesmartpay" />
+                <package android:name="com.wooricard.wpay" />
+                <package android:name="com.tmoney.nfc_pay" />
+                <package android:name="gov.gimpo.gpay" />
+                <package android:name="com.tmoney.inapp" />
+                <package android:name="com.skp.android.paypin" />
+            </queries>
+        </config-file>
     </platform>
 
     <!-- ios -->
@@ -121,6 +181,43 @@
                     <key>CFBundleURLSchemes</key>
                     <array>
                         <string>$PACKAGE_NAME.popupbridge</string>
+                        <string>ispmobile</string> 
+                        <string>kb-acp</string>
+                        <string>liivbank</string>
+                        <string>newliiv</string>
+                        <string>kbbank</string>
+                        <string>lotteappcard</string>
+                        <string>lottesmartpay</string>
+                        <string>hdcardappcardansimclick</string>
+                        <string>smhyundaiansimclick</string>
+                        <string>mpocket.online.ansimclick</string>
+                        <string>scardcertiapp</string>
+                        <string>shinhan-sr-ansimclick</string>
+                        <string>smshinhanansimclick</string>
+                        <string>nhappcardansimclick</string>
+                        <string>nhallonepayansimclick</string>
+                        <string>nonghyupcardansimclick</string>
+                        <string>cloudpay</string>
+                        <string>citispay</string>
+                        <string>NA</string>
+                        <string>kftc-bankpay</string>
+                        <string>paypin</string>
+                        <string>payco</string>
+                        <string>paycoapplogin</string>
+                        <string>tswansimclick</string>
+                        <string>bankwallet</string>
+                        <string>uppay</string>
+                        <string>Hanaskcardmobileportal</string>
+                        <string>Callonlinepay</string>
+                        <string>Lpayapp</string>
+                        <string>Wooripay</string>
+                        <string>hanawalletmembers</string>
+                        <string>hanamopmoasign</string>
+                        <string>NewSmartPib</string>
+                        <string>supertoss</string>
+                        <string>com.wooricard.wcard</string>
+                        <string>line</string>
+                        <string>alipays</string>
                     </array>
                 </dict>
             </array>

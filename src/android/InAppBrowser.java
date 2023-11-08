@@ -20,6 +20,7 @@ package org.apache.cordova.inappbrowser;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,12 +30,15 @@ import android.provider.Browser;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Color;
 import android.net.http.SslError;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -45,6 +49,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -62,6 +67,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
+import com.braintreepayments.api.PopupBridgeClient;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.Config;
@@ -151,6 +161,7 @@ public class InAppBrowser extends CordovaPlugin {
     private boolean fullscreen = true;
     private String[] allowedSchemes;
     private InAppBrowserClient currentClient;
+    private PopupBridgeClient popupBridgeClient;
 
     /**
      * Executes the request and returns PluginResult.
@@ -370,6 +381,23 @@ public class InAppBrowser extends CordovaPlugin {
         if (shouldPauseInAppBrowser) {
             inAppWebView.onResume();
         }
+        try{
+            if(popupBridgeClient == null){
+                createPopupBridgeClient();
+            }
+            popupBridgeClient.deliverPopupBridgeResult((FragmentActivity) cordova.getActivity());
+        }catch (Exception e){
+            LOG.e(LOG_TAG, "Failed to deliver PopupBridge result: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        try{
+            cordova.getActivity().setIntent(intent);
+        }catch (Exception e){
+            LOG.e(LOG_TAG, "Failed to set intent: "+e.getMessage());
+        }
     }
 
     /**
@@ -536,8 +564,22 @@ public class InAppBrowser extends CordovaPlugin {
                     // NB: wait for about:blank before dismissing
                     public void onPageFinished(WebView view, String url) {
                         if (dialog != null && !cordova.getActivity().isFinishing()) {
-                            dialog.dismiss();
+                            try {
+                                dialog.dismiss();
+                            }catch (Exception e){
+                                Log.e(LOG_TAG, "Failed to dismiss dialog: " + e.getMessage());
+                            }
                             dialog = null;
+                        }
+
+                        // Fix for webView window not being destroyed correctly causing memory leak
+                        // (https://github.com/apache/cordova-plugin-inappbrowser/issues/290)
+                        if (url.equals(new String("about:blank"))) {
+                            inAppWebView.onPause();
+                            inAppWebView.removeAllViews();
+                            inAppWebView.destroyDrawingCache();
+                            inAppWebView.destroy();
+                            inAppWebView = null;
                         }
                     }
                 });
@@ -783,7 +825,11 @@ public class InAppBrowser extends CordovaPlugin {
 
                 // CB-6702 InAppBrowser hangs when opening more than one instance
                 if (dialog != null) {
-                    dialog.dismiss();
+                    try {
+                        dialog.dismiss();
+                    }catch (Exception e){
+                        Log.e(LOG_TAG, "Failed to dismiss dialog: " + e.getMessage());
+                    }
                 };
 
                 // Let's create the main dialog
@@ -918,6 +964,8 @@ public class InAppBrowser extends CordovaPlugin {
 
                 // WebView
                 inAppWebView = new WebView(cordova.getActivity());
+                inAppWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                createPopupBridgeClient();
                 inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                 inAppWebView.setId(Integer.valueOf(6));
                 // File Chooser Implemented ChromeClient
@@ -971,7 +1019,7 @@ public class InAppBrowser extends CordovaPlugin {
                             }
                         }
                     }
-                );        
+                );
 
                 // Add postMessage interface
                 class JsObject {
@@ -1073,6 +1121,20 @@ public class InAppBrowser extends CordovaPlugin {
         };
         this.cordova.getActivity().runOnUiThread(runnable);
         return "";
+    }
+
+    private void createPopupBridgeClient(){
+        try{
+
+            String urlScheme = cordova.getActivity().getApplicationContext().getPackageName() + ".popupbridge";
+            popupBridgeClient = new PopupBridgeClient((FragmentActivity) cordova.getActivity(), inAppWebView, urlScheme);
+
+            // register error listener
+            popupBridgeClient.setErrorListener(error -> {
+                Log.e("PopupBridgeActivity", error.getMessage());
+            });
+
+        }catch (Exception e){} //swallow exception
     }
 
     /**

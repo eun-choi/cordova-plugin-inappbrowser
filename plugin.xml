@@ -37,6 +37,8 @@
 
     <!-- android -->
     <platform name="android">
+        <preference name="POPUPBRIDGE_ANDROID_VERSION" default="4.1.0" />
+
         <js-module src="www/inappbrowser.js" name="inappbrowser">
             <clobbers target="cordova.InAppBrowser.open" />
         </js-module>
@@ -66,6 +68,14 @@
         <resource-file src="src/android/res/drawable-xhdpi/ic_action_remove.png" target="res/drawable-xhdpi/ic_action_remove.png" />
         <resource-file src="src/android/res/drawable-xxhdpi/ic_action_remove.png" target="res/drawable-xxhdpi/ic_action_remove.png" />
 
+        <!-- PopupBridge -->
+        <config-file target="config.xml" parent="/*">
+            <preference name="android-minSdkVersion" value="24" tools:overrideLibrary="com.braintreepayments.popupbridge" />
+        </config-file>
+
+        <framework src="com.braintreepayments.api:popup-bridge:$POPUPBRIDGE_ANDROID_VERSION" />
+
+        <hook type="after_prepare" src="src/android/update_manifest.js" />
     </platform>
 
     <!-- ios -->

@@ -19,11 +19,13 @@
 -->
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-           id="cordova-plugin-inappbrowser"
-      version="5.0.0">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        id="cordova-plugin-inappbrowser"
+        version="5.0.0">
 
     <name>InAppBrowser</name>
-    <description>Cordova InAppBrowser Plugin</description>
+    <description>Cordova InAppBrowser with PopupBridge Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,in,app,browser,inappbrowser</keywords>
     <repo>https://github.com/apache/cordova-plugin-inappbrowser</repo>
@@ -93,12 +95,36 @@
         <source-file src="src/ios/CDVInAppBrowserOptions.m" />
         <header-file src="src/ios/CDVInAppBrowserNavigationController.h" />
         <source-file src="src/ios/CDVInAppBrowserNavigationController.m" />
-	    <header-file src="src/ios/CDVWKInAppBrowser.h" />
-	    <source-file src="src/ios/CDVWKInAppBrowser.m" />
-	    <header-file src="src/ios/CDVWKInAppBrowserUIDelegate.h" />
-	    <source-file src="src/ios/CDVWKInAppBrowserUIDelegate.m" />
+        <header-file src="src/ios/CDVWKInAppBrowser.h" />
+        <source-file src="src/ios/CDVWKInAppBrowser.m" />
+        <header-file src="src/ios/CDVWKInAppBrowserUIDelegate.h" />
+        <source-file src="src/ios/CDVWKInAppBrowserUIDelegate.m" />
 
-	    <framework src="CoreGraphics.framework" />
+        <framework src="CoreGraphics.framework" />
+
+        <!-- Popup Bridge -->
+        <header-file src="src/ios/AppDelegate+PopupBridge.h" />
+        <source-file src="src/ios/AppDelegate+PopupBridge.m" />
+
+        <header-file src="src/ios/POPPopUpBridge.h" />
+        <source-file src="src/ios/POPPopUpBridge.m" />
+        <header-file src="src/ios/POPWeakScriptMessageDelegate.h" />
+        <source-file src="src/ios/POPWeakScriptMessageDelegate.m" />
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLName</key>
+                    <string></string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>$PACKAGE_NAME.popupbridge</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
     </platform>
 
     <!-- browser -->

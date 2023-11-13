@@ -181,7 +181,11 @@
                     <key>CFBundleURLSchemes</key>
                     <array>
                         <string>$PACKAGE_NAME.popupbridge</string>
-                        <string>ispmobile</string> 
+                    </array>
+                </dict>
+            </array>
+        </config-file>
+        <!--                        <string>ispmobile</string> 
                         <string>kb-acp</string>
                         <string>liivbank</string>
                         <string>newliiv</string>
@@ -217,11 +221,7 @@
                         <string>supertoss</string>
                         <string>com.wooricard.wcard</string>
                         <string>line</string>
-                        <string>alipays</string>
-                    </array>
-                </dict>
-            </array>
-        </config-file>
+                        <string>alipays</string>-->
     </platform>
 
     <!-- browser -->
